@@ -194,6 +194,8 @@ src/
 │   └── services
 ├── infrastructure/
 │   ├── http
+│   │   ├──controllers
+│   │   └──dtos
 │   ├── prisma
 │   └── auth
 ├── shared/
