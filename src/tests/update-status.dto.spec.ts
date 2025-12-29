@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { UpdateStatusDto } from '../../infrastructure/http/dtos/update-status.dto';
-import { OrderStatus } from '../../domain/enums/order-status.enum';
+import { UpdateStatusDto } from '../infrastructure/http/dtos/update-status.dto';
+import { OrderStatus } from '../domain/enums/order-status.enum';
 
 describe('UpdateStatusDto validation', () => {
   const validStatuses = Object.values(OrderStatus);

@@ -1,4 +1,4 @@
-import { AppLogger } from '../../shared/logger/app.logger';
+import { AppLogger } from '../shared/logger/app.logger';
 
 describe('AppLogger', () => {
   let logger: AppLogger;

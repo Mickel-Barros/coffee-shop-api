@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { GetOrderUseCase } from '../../application/use-cases/get-order.usecase';
+import { GetOrderUseCase } from '../application/use-cases/get-order.usecase';
 
 describe('GetOrderUseCase', () => {
   const makeSut = () => {

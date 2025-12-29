@@ -1,8 +1,5 @@
-// src/tests/prisma-order.repository.spec.ts
-
-import { PrismaOrderRepository } from '../../infrastructure/prisma/prisma-order.repository';
-import { PrismaService } from '../../infrastructure/prisma/prisma.service';
-import { OrderStatus } from '../../domain/enums/order-status.enum';
+import { PrismaOrderRepository } from '../infrastructure/prisma/prisma-order.repository';
+import { OrderStatus } from '../domain/enums/order-status.enum';
 
 describe('PrismaOrderRepository', () => {
   let repository: PrismaOrderRepository;

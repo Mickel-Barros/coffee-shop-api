@@ -1,9 +1,6 @@
-// src/tests/prisma-user.repository.spec.ts
-
-import { PrismaUserRepository } from '../../infrastructure/prisma/prisma-user.repository';
-import { PrismaService } from '../../infrastructure/prisma/prisma.service';
-import { Role } from '../../domain/enums/role.enum';
-import { User } from '../../domain/entities/user.entity';
+import { PrismaUserRepository } from '../infrastructure/prisma/prisma-user.repository';
+import { Role } from '../domain/enums/role.enum';
+import { User } from '../domain/entities/user.entity';
 
 describe('PrismaUserRepository', () => {
   let repository: PrismaUserRepository;

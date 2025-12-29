@@ -1,4 +1,3 @@
-// src/tests/payment.service.spec.ts
 import { PaymentService } from '../application/services/payment.service';
 import axios from 'axios';
 import { InternalServerErrorException } from '@nestjs/common';

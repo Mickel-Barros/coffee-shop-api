@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { SignupDto } from '../../infrastructure/http/dtos/signup.dto';
-import { Role } from '../../domain/enums/role.enum';
+import { SignupDto } from '../infrastructure/http/dtos/signup.dto';
+import { Role } from '../domain/enums/role.enum';
 
 describe('SignupDto validation', () => {
   const validPayload = {

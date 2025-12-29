@@ -1,5 +1,5 @@
-import { AppLogger } from '../../shared/logger/app.logger';
-import { RequestLoggingMiddleware } from '../../shared/middlewares/request-logging.middleware';
+import { AppLogger } from '../shared/logger/app.logger';
+import { RequestLoggingMiddleware } from '../shared/middlewares/request-logging.middleware';
 import { Request, Response, NextFunction } from 'express';
 
 describe('RequestLoggingMiddleware', () => {

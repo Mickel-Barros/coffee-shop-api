@@ -31,11 +31,11 @@ import { NotificationService } from './application/services/notification.service
 import { PrismaOrderRepository } from './infrastructure/prisma/prisma-order.repository.js';
 import { PrismaUserRepository } from './infrastructure/prisma/prisma-user.repository.js';
 
-// Middleware e Logger
+// Middleware and Logger
 import { RequestLoggingMiddleware } from './shared/middlewares/request-logging.middleware.js';
 import { AppLogger } from './shared/logger/app.logger.js';
 
-const Joi = JoiImport; // ou diretamente const Joi = require('joi')
+const Joi = JoiImport;
 
 @Module({
   imports: [
@@ -89,12 +89,12 @@ const Joi = JoiImport; // ou diretamente const Joi = require('joi')
     LoginUseCase,
     SignupUseCase,
 
-    // Services externos
+    // External Services
     PaymentService,
     NotificationService,
     JwtStrategy,
 
-    // Logger (se você usa em outros lugares via injeção)
+    // Logger
     AppLogger,
   ],
 })

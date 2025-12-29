@@ -43,4 +43,4 @@ COPY .env.development .env
 EXPOSE 3000
 
 # Run migrations and start the server
-CMD ["sh", "-c", "npx prisma migrate deploy --dotenv=.env.development && node dist/main.js"]
+CMD ["sh", "-c", "npx prisma generate && cp -r src/generated dist/generated && node dist/main.js"]

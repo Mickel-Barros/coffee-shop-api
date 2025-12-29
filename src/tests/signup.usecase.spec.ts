@@ -1,23 +1,18 @@
-// src/tests/signup.usecase.spec.ts
-
-import { SignupUseCase } from '../../application/use-cases/signup.usecase';
-import { UserRepository } from '../../domain/repositories/user.repository';
-import { Role } from '../../domain/enums/role.enum';
+import { SignupUseCase } from '../application/use-cases/signup.usecase';
+import { UserRepository } from '../domain/repositories/user.repository';
+import { Role } from '../domain/enums/role.enum';
 import { ConflictException, BadRequestException } from '@nestjs/common';
 
-// Mock manual do bcrypt no topo do arquivo
 jest.mock('bcrypt', () => ({
   hash: jest.fn().mockResolvedValue('hashed-password-from-mock'),
 }));
 
-// Importe APÓS o mock
 import * as bcrypt from 'bcrypt';
 
 describe('SignupUseCase', () => {
   let signupUseCase: SignupUseCase;
   let userRepository: jest.Mocked<UserRepository>;
 
-  // Cast do mock para acessar as funções
   const bcryptHashMock = bcrypt.hash as jest.Mock;
 
   beforeEach(() => {
@@ -28,7 +23,6 @@ describe('SignupUseCase', () => {
 
     signupUseCase = new SignupUseCase(userRepository);
 
-    // Limpa chamadas anteriores, mas mantém o mock
     bcryptHashMock.mockClear();
     bcryptHashMock.mockResolvedValue('hashed-password-from-mock');
   });

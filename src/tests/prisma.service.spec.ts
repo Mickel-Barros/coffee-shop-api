@@ -1,4 +1,3 @@
-// src/tests/prisma.service.spec.ts
 import { PrismaService } from '../infrastructure/prisma/prisma.service';
 
 describe('PrismaService', () => {
@@ -6,7 +5,6 @@ describe('PrismaService', () => {
 
   beforeEach(() => {
     prismaService = new PrismaService();
-    // Mockar $connect e $disconnect
     prismaService.$connect = jest.fn().mockResolvedValue(undefined);
     prismaService.$disconnect = jest.fn().mockResolvedValue(undefined);
   });

@@ -1,5 +1,5 @@
-import { GlobalExceptionFilter } from '../../shared/filters/global-exception.filter';
-import { AppLogger } from '../../shared/logger/app.logger';
+import { GlobalExceptionFilter } from '../shared/filters/global-exception.filter';
+import { AppLogger } from '../shared/logger/app.logger';
 import { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
 

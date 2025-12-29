@@ -1,5 +1,5 @@
-import { NotificationService } from '../../application/services/notification.service';
-import { OrderStatus } from '../../domain/enums/order-status.enum';
+import { NotificationService } from '../application/services/notification.service';
+import { OrderStatus } from '../domain/enums/order-status.enum';
 import axios from 'axios';
 import { InternalServerErrorException } from '@nestjs/common';
 

@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
-import { CreateOrderUseCase } from '../../application/use-cases/create-order.usecase';
-import { OrderStatus } from '../../domain/enums/order-status.enum';
+import { CreateOrderUseCase } from '../application/use-cases/create-order.usecase';
+import { OrderStatus } from '../domain/enums/order-status.enum';
 
 describe('CreateOrderUseCase', () => {
   const makeSut = () => {

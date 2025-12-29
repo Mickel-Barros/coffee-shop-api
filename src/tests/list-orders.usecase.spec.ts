@@ -1,4 +1,4 @@
-import { ListOrdersUseCase } from '../../application/use-cases/list-orders.usecase';
+import { ListOrdersUseCase } from '../application/use-cases/list-orders.usecase';
 
 describe('ListOrdersUseCase', () => {
   const makeSut = () => {

@@ -1,10 +1,8 @@
-// src/tests/login.usecase.spec.ts
-
-import { LoginUseCase } from '../../application/use-cases/login.usecase';
+import { LoginUseCase } from '../application/use-cases/login.usecase';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from '../../domain/repositories/user.repository';
-import { Role } from '../../domain/enums/role.enum';
+import { UserRepository } from '../domain/repositories/user.repository';
+import { Role } from '../domain/enums/role.enum';
 import * as bcrypt from 'bcrypt';
 
 describe('LoginUseCase', () => {
@@ -12,16 +10,14 @@ describe('LoginUseCase', () => {
   let userRepository: jest.Mocked<UserRepository>;
   let jwtService: jest.Mocked<JwtService>;
 
-  // Objeto mock do usuário - o passwordHash será preenchido no beforeAll
   const mockUser = {
     id: 'user-123',
     email: 'john@coffee.com',
     name: 'John Coffee',
-    passwordHash: '', // será sobrescrito com hash real
+    passwordHash: '',
     role: Role.CUSTOMER,
   };
 
-  // Calcula o hash de forma assíncrona antes de todos os testes
   beforeAll(async () => {
     mockUser.passwordHash = await bcrypt.hash('correct-password', 10);
   });

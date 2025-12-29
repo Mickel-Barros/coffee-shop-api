@@ -1,5 +1,5 @@
-import { CreateOrderMapper } from '../../application/mappers/create-order.mapper';
-import { CreateOrderDto } from '../../infrastructure/http/dtos/create-order.dto';
+import { CreateOrderMapper } from '../application/mappers/create-order.mapper';
+import { CreateOrderDto } from '../infrastructure/http/dtos/create-order.dto';
 
 describe('CreateOrderMapper', () => {
   it('should map CreateOrderDto to command correctly', () => {

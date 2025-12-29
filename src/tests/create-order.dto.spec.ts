@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { CreateOrderDto } from '../../infrastructure/http/dtos/create-order.dto';
+import { CreateOrderDto } from '../infrastructure/http/dtos/create-order.dto';
 
 describe('CreateOrderDto validation', () => {
   it('valid payload passes validation', async () => {

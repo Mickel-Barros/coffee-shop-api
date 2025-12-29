@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { PaginationDto } from '../../infrastructure/http/dtos/pagination.dto';
+import { PaginationDto } from '../infrastructure/http/dtos/pagination.dto';
 
 describe('PaginationDto validation', () => {
   it('should use default values when no params are provided', async () => {

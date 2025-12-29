@@ -28,33 +28,40 @@ For larger systems, alternatives like OAuth2, Keycloak, or CQRS could be conside
 
 | Command         | Description                                                |
 | --------------- | ---------------------------------------------------------- |
+| `npm i`         | Install all dependencies                                   |
 | `npm run dev`   | Runs the application in development mode with hot-reload   |
 | `npm run build` | Compiles TypeScript and copies the Prisma Client to `dist` |
 | `npm start`     | Runs the compiled application                              |
 
 ### Prisma
 
-| Command             | Description                                          |
-| ------------------- | ---------------------------------------------------- |
-| `npm run generate`  | Generates the Prisma Client (`src/generated/prisma`) |
-| `npx prisma deploy` | Applies database migrations                          |
+| Command                     | Description                                          |
+| --------------------------- | ---------------------------------------------------- |
+| `npx prisma generate`       | Generates the Prisma Client (`src/generated/prisma`) |
+| `npx prisma migrate deploy` | Applies database migrations                          |
 
 ### Docker
 
-| Command                  | Description                         |
-| ------------------------ | ----------------------------------- |
-| `docker-compose up -d`   | Starts containers in the background |
-| `docker-compose down`    | Stops and removes containers        |
-| `docker-compose logs -f` | Follows container logs in real time |
+| Command                             | Description                         |
+| ----------------------------------- | ----------------------------------- |
+| `docker build -t coffee-shop-api .` | Starts containers in the background |
+| `docker run -d coffee-shop-api`     | Stops and removes containers        |
+| `docker-compose logs -f`            | Follows container logs in real time |
+
+| Command            | Tests                    |
+| ------------------ | ------------------------ |
+| `npm run test`     | Run all tests once       |
+| `npm run test:cov` | Run with coverage report |
 
 ---
 
 💡 **Recommended workflow (without Docker):**
 
 ```bash
-npm run generate      # generate Prisma Client
-npm run build         # compile TS and copy Prisma Client to dist
-npm start             # run the app
+npm i                 # Install all dependencies
+npx run generate      # generate Prisma Client
+npm run dev           # run the app
+
 
 ```
 

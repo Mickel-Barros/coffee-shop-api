@@ -3,8 +3,8 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { UpdateOrderStatusUseCase } from '../../application/use-cases/update-order-status.usecase';
-import { OrderStatus } from '../../domain/enums/order-status.enum';
+import { UpdateOrderStatusUseCase } from '../application/use-cases/update-order-status.usecase';
+import { OrderStatus } from '../domain/enums/order-status.enum';
 
 describe('UpdateOrderStatusUseCase', () => {
   const makeSut = () => {
