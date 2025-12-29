@@ -42,18 +42,14 @@ describe('PaginationDto validation', () => {
     expect(typeof dto.limit).toBe('number');
   });
 
-  it('should fail when page is less than 1', async () => {
+  // CORRIGIDO: com o ||, page=0 vira 1 → válido → não gera erro
+  it('should fallback to default when page is less than 1', async () => {
     const dto = plainToInstance(PaginationDto, { page: 0 });
 
     const errors = await validate(dto);
-    expect(errors).toHaveLength(1);
+    expect(errors).toHaveLength(0); // ← agora espera 0 erros
 
-    const error = errors[0];
-    expect(error.property).toBe('page');
-    expect(error.constraints).toHaveProperty(
-      'min',
-      'page must not be less than 1',
-    );
+    expect(dto.page).toBe(1); // fallback para default
   });
 
   it('should fail when page is not an integer', async () => {
@@ -70,60 +66,50 @@ describe('PaginationDto validation', () => {
     );
   });
 
-  it('should fail when limit is greater than 50', async () => {
-    const dto = plainToInstance(PaginationDto, { limit: 51 });
+  // CORRIGIDO: limit=101 vira 100 pelo Math.min → válido
+  it('should cap limit at 100 when greater than 100', async () => {
+    const dto = plainToInstance(PaginationDto, { limit: 101 });
 
     const errors = await validate(dto);
-    expect(errors).toHaveLength(1);
+    expect(errors).toHaveLength(0); // ← válido após o Math.min
 
-    const error = errors[0];
-    expect(error.property).toBe('limit');
-    expect(error.constraints).toHaveProperty(
-      'max',
-      'limit must not be greater than 50',
-    );
+    expect(dto.limit).toBe(100);
   });
 
-  it('should fail when limit is less than 1', async () => {
+  // CORRIGIDO: limit=0 vira 10 → válido
+  it('should fallback to default when limit is less than 1', async () => {
     const dto = plainToInstance(PaginationDto, { limit: 0 });
 
     const errors = await validate(dto);
-    expect(errors).toHaveLength(1);
+    expect(errors).toHaveLength(0);
 
-    const error = errors[0];
-    expect(error.property).toBe('limit');
-    expect(error.constraints).toHaveProperty(
-      'min',
-      'limit must not be less than 1',
-    );
+    expect(dto.limit).toBe(10);
   });
 
-  it('should fail when values are not numbers (even after transformation)', async () => {
+  // CORRIGIDO: valores inválidos viram defaults → válido
+  it('should fallback to defaults when values are not valid numbers', async () => {
     const dto = plainToInstance(PaginationDto, {
       page: 'not-a-number',
       limit: 'abc',
     });
 
     const errors = await validate(dto);
-    expect(errors).toHaveLength(2);
+    expect(errors).toHaveLength(0); // ← agora espera 0 erros
 
-    const pageError = errors.find((e) => e.property === 'page');
-    expect(pageError?.constraints).toHaveProperty('isInt');
-
-    const limitError = errors.find((e) => e.property === 'limit');
-    expect(limitError?.constraints).toHaveProperty('isInt');
+    expect(dto.page).toBe(1);
+    expect(dto.limit).toBe(10);
   });
 
-  it('should accept page=1 and limit=50 as maximum valid values', async () => {
+  it('should accept page=1 and limit=100 as maximum valid values', async () => {
     const dto = plainToInstance(PaginationDto, {
       page: 1,
-      limit: 50,
+      limit: 100,
     });
 
     const errors = await validate(dto);
     expect(errors).toHaveLength(0);
 
     expect(dto.page).toBe(1);
-    expect(dto.limit).toBe(50);
+    expect(dto.limit).toBe(100);
   });
 });

@@ -6,45 +6,43 @@ import {
   Patch,
   Post,
   Query,
-  Request,
   UseGuards,
-  ForbiddenException,
 } from '@nestjs/common';
 import {
-  ApiBearerAuth,
   ApiTags,
-  ApiOperation,
-  ApiResponse,
   ApiQuery,
+  ApiOperation,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiUnauthorizedResponse,
-  ApiForbiddenResponse,
-  ApiNotFoundResponse,
-  ApiBadRequestResponse,
 } from '@nestjs/swagger';
-import { Roles } from '../../auth/roles.decorator.js';
-import { Role } from '../../../domain/enums/role.enum.js';
+
+import { JwtAuthGuard } from '../../auth/jwt.auth-guard.js';
+import { RolesGuard } from '../../auth/roles.guard.js';
+import {
+  ManagerOnly,
+  CustomerOrManager,
+} from '../decorators/roles.decorators.js';
+import { CurrentUser } from '../decorators/current-user.decorator.js';
+
 import { CreateOrderUseCase } from '../../../application/use-cases/create-order.usecase.js';
 import { GetOrderUseCase } from '../../../application/use-cases/get-order.usecase.js';
 import { UpdateOrderStatusUseCase } from '../../../application/use-cases/update-order-status.usecase.js';
 import { ListOrdersUseCase } from '../../../application/use-cases/list-orders.usecase.js';
+
 import { CreateOrderDto } from '../dtos/create-order.dto.js';
 import { UpdateStatusDto } from '../dtos/update-status.dto.js';
 import { PaginationDto } from '../dtos/pagination.dto.js';
-import { CreateOrderMapper } from '../../../application/mappers/create-order.mapper.js';
-import { JwtAuthGuard } from '../../auth/jwt.auth-guard.js';
-import { RolesGuard } from '../../auth/roles.guard.js';
 
-interface RequestWithUser extends Request {
-  user: {
-    userId: string;
-    role: Role;
-  };
-}
+import { CreateOrderMapper } from '../../../application/mappers/create-order.mapper.js';
+import { OrderQueryMapper } from '../../../application/mappers/order-query.mapper.js';
+
+import { OrderOwnershipGuard } from '../guards/order-ownership.guard.js';
+import { ApiAuthResponses } from '../decorators/swagger-decorator.js';
+
+import { AuthUser } from '../../auth/auth-user.type.js';
 
 @ApiTags('orders')
-@ApiBearerAuth('jwt')
+@ApiAuthResponses()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('orders')
 export class OrdersController {
@@ -56,7 +54,6 @@ export class OrdersController {
   ) {}
 
   @Post()
-  @Roles(Role.CUSTOMER, Role.MANAGER)
   @ApiOperation({
     summary: 'Create a new order',
     description:
@@ -78,20 +75,14 @@ export class OrdersController {
       },
     },
   })
-  @ApiUnauthorizedResponse({
-    description: 'Unauthorized - missing or invalid token',
-  })
-  @ApiForbiddenResponse({
-    description: 'Forbidden - only customers can place orders',
-  })
-  @ApiBadRequestResponse({ description: 'Invalid order data' })
-  async create(@Body() dto: CreateOrderDto, @Request() req: RequestWithUser) {
-    const command = CreateOrderMapper.toCommand(dto, req.user.userId);
-    return this.createOrder.execute(command);
+  @CustomerOrManager()
+  async create(@Body() dto: CreateOrderDto, @CurrentUser() user: AuthUser) {
+    return this.createOrder.execute(
+      CreateOrderMapper.toCommand(dto, user.userId),
+    );
   }
 
   @Get(':id')
-  @Roles(Role.CUSTOMER, Role.MANAGER)
   @ApiOperation({
     summary: 'Get order by ID',
     description:
@@ -114,23 +105,13 @@ export class OrdersController {
       },
     },
   })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiForbiddenResponse({
-    description: 'Forbidden - you can only view your own orders',
-  })
-  @ApiNotFoundResponse({ description: 'Order not found' })
-  async findOne(@Param('id') id: string, @Request() req: RequestWithUser) {
-    const order = await this.getOrder.execute(id);
-
-    if (req.user.role !== Role.MANAGER && order.userId !== req.user.userId) {
-      throw new ForbiddenException('You can only view your own orders');
-    }
-
-    return order;
+  @CustomerOrManager()
+  @UseGuards(OrderOwnershipGuard)
+  async findOne(@Param('id') id: string) {
+    return this.getOrder.execute(id);
   }
 
   @Patch(':id/status')
-  @Roles(Role.MANAGER)
   @ApiOperation({
     summary: 'Update order status',
     description:
@@ -146,18 +127,15 @@ export class OrdersController {
       },
     },
   })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiForbiddenResponse({
-    description: 'Forbidden - only managers can update status',
-  })
-  @ApiNotFoundResponse({ description: 'Order not found' })
-  @ApiBadRequestResponse({ description: 'Invalid status value' })
-  async update(@Param('id') id: string, @Body() dto: UpdateStatusDto) {
+  @ManagerOnly()
+  async updateStatusByManager(
+    @Param('id') id: string,
+    @Body() dto: UpdateStatusDto,
+  ) {
     return this.updateStatus.execute(id, dto.status);
   }
 
   @Get()
-  @Roles(Role.MANAGER)
   @ApiOperation({
     summary: 'List orders (paginated)',
     description:
@@ -202,19 +180,13 @@ export class OrdersController {
       },
     },
   })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ManagerOnly()
   async list(
     @Query() pagination: PaginationDto,
-    @Request() req: RequestWithUser,
+    @CurrentUser() user: AuthUser,
   ) {
-    const isManager = req.user.role === 'manager';
-    const page = Number(pagination.page) || 1;
-    const limit = Math.min(Number(pagination.limit) || 10, 100);
-
-    return this.listOrders.execute({
-      page,
-      limit,
-      userId: isManager ? undefined : req.user.userId,
-    });
+    return this.listOrders.execute(
+      OrderQueryMapper.toListQuery(pagination, user),
+    );
   }
 }
