@@ -1,0 +1,82 @@
+{
+  "name": "coffee-shop-api",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx nest start --watch",
+    "start": "node dist/main.js",
+    "build": "tsc && xcopy src\\generated dist\\generated /E /I /Y",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.ts\"\"",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "migrate:deploy": "prisma migrate deploy --schema=prisma/schema.prisma --dotenv=.env.development",
+    "prepare": "husky"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.10",
+    "@nestjs/jwt": "^11.0.2",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.1.10",
+    "@nestjs/swagger": "^11.2.3",
+    "@nestjs/throttler": "^6.5.0",
+    "@prisma/adapter-mariadb": "^7.2.0",
+    "@prisma/adapter-pg": "^7.2.0",
+    "@prisma/client": "^7.2.0",
+    "@supabase/supabase-js": "^2.89.0",
+    "axios": "^1.13.2",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "joi": "^18.0.2",
+    "mariadb": "^3.4.5",
+    "passport-jwt": "^4.0.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@nestjs/cli": "^11.0.14",
+    "@nestjs/testing": "^11.1.10",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.0.3",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/pg": "^8.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4",
+    "prisma": "^7.2.0",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.6",
+    "typescript-eslint": "^8.50.1"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,js,cjs,mjs}": [
+      "prettier --write"
+    ]
+  }
+}
