@@ -1,10 +1,8 @@
-// prisma.config.ts
-import 'dotenv/config'; // Import padrão
+import 'dotenv/config';
 import { defineConfig, env } from 'prisma/config';
 
-// Carrega .env específico, por exemplo .env.production
 import dotenv from 'dotenv';
-dotenv.config({ path: '.env.development' }); // ou '.env.example'
+dotenv.config({ path: '.env.development' });
 
 export default defineConfig({
   schema: './prisma/schema.prisma',
