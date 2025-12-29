@@ -44,9 +44,8 @@ For larger systems, alternatives like OAuth2, Keycloak, or CQRS could be conside
 
 | Command                             | Description                         |
 | ----------------------------------- | ----------------------------------- |
-| `docker build -t coffee-shop-api .` | Starts containers in the background |
-| `docker run -d coffee-shop-api`     | Stops and removes containers        |
-| `docker-compose logs -f`            | Follows container logs in real time |
+| `docker build -t coffee-shop-api .` | Build image                         |
+| `docker run -d coffee-shop-api`     | Starts containers in the background |
 
 | Command            | Tests                    |
 | ------------------ | ------------------------ |
@@ -119,13 +118,6 @@ Each product has:
 
 - Price adjustments per variation
 
-> Example:
-
-Product Base Price Variation Price Change
-Latte $4.00 Vanilla +$0.30
-Espresso $2.50 Double Shot +$1.00
-Donut $2.00 Boston Cream +$0.50
-
 ---
 
 ### 📡 API Endpoints
@@ -147,11 +139,6 @@ Integrates with external Payment Service
 Order is created only if payment succeeds
 
 Initial status: Waiting
-
-External integration:
-
-> POST https://challenge.trio.dev/api/v1/payment
-> { "value": TOTAL_AMOUNT }
 
 > GET /orders
 
@@ -208,7 +195,7 @@ src/
 ├── infrastructure/
 │   ├── http
 │   ├── prisma
-│   └──
+│   └── auth
 ├── shared/
 │   ├── catalog
 │   ├── filters
@@ -262,8 +249,6 @@ Separate environments supported:
 - development
 
 - production
-
-Configuration is validated at startup using ConfigModule.
 
 Swagger is enabled only in development.
 

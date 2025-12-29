@@ -8,6 +8,7 @@ import {
   Query,
   Request,
   UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -48,7 +49,7 @@ export class OrdersController {
   ) {}
 
   @Post()
-  @Roles(Role.CUSTOMER)
+  @Roles(Role.CUSTOMER, Role.MANAGER)
   @ApiOperation({
     summary: 'Create a new order',
     description:
@@ -83,6 +84,7 @@ export class OrdersController {
   }
 
   @Get(':id')
+  @Roles(Role.CUSTOMER, Role.MANAGER)
   @ApiOperation({
     summary: 'Get order by ID',
     description:
@@ -110,8 +112,14 @@ export class OrdersController {
     description: 'Forbidden - you can only view your own orders',
   })
   @ApiNotFoundResponse({ description: 'Order not found' })
-  async findOne(@Param('id') id: string) {
-    return this.getOrder.execute(id);
+  async findOne(@Param('id') id: string, @Request() req: any) {
+    const order = await this.getOrder.execute(id);
+
+    if (req.user.role !== Role.MANAGER && order.userId !== req.user.userId) {
+      throw new ForbiddenException('You can only view your own orders');
+    }
+
+    return order;
   }
 
   @Patch(':id/status')
@@ -142,6 +150,7 @@ export class OrdersController {
   }
 
   @Get()
+  @Roles(Role.MANAGER)
   @ApiOperation({
     summary: 'List orders (paginated)',
     description:
