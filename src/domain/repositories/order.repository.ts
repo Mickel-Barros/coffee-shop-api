@@ -1,3 +1,4 @@
+import { Order } from '../entities/order.entity.js';
 import { OrderStatus } from '../enums/order-status.enum.js';
 
 export interface OrderRepository {
@@ -10,19 +11,19 @@ export interface OrderRepository {
     }[];
     total: number;
     status: OrderStatus;
-  }): Promise<any>;
+  }): Promise<Order>;
 
-  findById(orderId: string): Promise<any | null>;
+  findById(orderId: string): Promise<Order | null>;
 
-  findByIdWithItems(orderId: string): Promise<any | null>;
+  findByIdWithItems(orderId: string): Promise<Order | null>;
 
-  updateStatus(orderId: string, status: OrderStatus): Promise<any>;
+  updateStatus(orderId: string, status: OrderStatus): Promise<Order>;
 
   findMany(input: {
     skip: number;
     take: number;
     userId?: string;
-  }): Promise<any[]>;
+  }): Promise<Order[]>;
 
   count(input: { userId?: string }): Promise<number>;
 }

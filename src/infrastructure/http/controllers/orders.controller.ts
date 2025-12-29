@@ -36,6 +36,13 @@ import { CreateOrderMapper } from '../../../application/mappers/create-order.map
 import { JwtAuthGuard } from '../../auth/jwt.auth-guard.js';
 import { RolesGuard } from '../../auth/roles.guard.js';
 
+interface RequestWithUser extends Request {
+  user: {
+    userId: string;
+    role: Role;
+  };
+}
+
 @ApiTags('orders')
 @ApiBearerAuth('jwt')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -78,7 +85,7 @@ export class OrdersController {
     description: 'Forbidden - only customers can place orders',
   })
   @ApiBadRequestResponse({ description: 'Invalid order data' })
-  async create(@Body() dto: CreateOrderDto, @Request() req: any) {
+  async create(@Body() dto: CreateOrderDto, @Request() req: RequestWithUser) {
     const command = CreateOrderMapper.toCommand(dto, req.user.userId);
     return this.createOrder.execute(command);
   }
@@ -112,7 +119,7 @@ export class OrdersController {
     description: 'Forbidden - you can only view your own orders',
   })
   @ApiNotFoundResponse({ description: 'Order not found' })
-  async findOne(@Param('id') id: string, @Request() req: any) {
+  async findOne(@Param('id') id: string, @Request() req: RequestWithUser) {
     const order = await this.getOrder.execute(id);
 
     if (req.user.role !== Role.MANAGER && order.userId !== req.user.userId) {
@@ -196,7 +203,10 @@ export class OrdersController {
     },
   })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  async list(@Query() pagination: PaginationDto, @Request() req: any) {
+  async list(
+    @Query() pagination: PaginationDto,
+    @Request() req: RequestWithUser,
+  ) {
     const isManager = req.user.role === 'manager';
     const page = Number(pagination.page) || 1;
     const limit = Math.min(Number(pagination.limit) || 10, 100);

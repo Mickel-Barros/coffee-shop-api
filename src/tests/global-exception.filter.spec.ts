@@ -79,10 +79,11 @@ describe('GlobalExceptionFilter', () => {
     filter.catch(exception, host);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+
     expect(mockResponse.json).toHaveBeenCalledWith(
       expect.objectContaining({
         statusCode: HttpStatus.BAD_REQUEST,
-        message: ['Invalid email format', 'Password too weak'],
+        message: 'Invalid email format, Password too weak',
         path: '/api/orders/123',
         timestamp: expect.any(String),
       }),

@@ -24,11 +24,16 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      const res = exception.getResponse();
-      message =
-        typeof res === 'string'
-          ? res
-          : (res as any).message || exception.message || message;
+      const response = exception.getResponse();
+
+      if (typeof response === 'string') {
+        message = response;
+      } else {
+        const body = response as { message?: string | string[] };
+        message = Array.isArray(body.message)
+          ? body.message.join(', ')
+          : body.message || exception.message || 'Internal server error';
+      }
     }
 
     this.logger.error(
