@@ -5,9 +5,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import JoiImport from 'joi';
 // Infrastructure
 import { PrismaService } from './infrastructure/prisma/prisma.service.js';
-import { JwtAuthGuard } from './infrastructure/auth/jwt.auth-guard.js';
 import { JwtStrategy } from './infrastructure/auth/jwt.strategy.js';
-import { RolesGuard } from './infrastructure/auth/roles.guard.js';
 import { JwtModule } from '@nestjs/jwt';
 
 // Controllers
